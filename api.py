@@ -1,7 +1,7 @@
 from app import app,db
 from models import Todo, Tag
 # from flask import request
-from flask_restful import Resource, Api, reqparse, abort
+from flask_restful import Resource, Api, reqparse, abort, fields, marshal_with
 import json
 
 #app = Flask(__name__)
@@ -10,6 +10,19 @@ api = Api(app)
 # parser = reqparse.RequestParser()
 # parser.add_argument('rate', type=int, help='Rate to charge for this resource')
 # args = parser.parse_args()
+
+tag_fields = {
+    'id' : fields.Integer,
+    'name': fields.String,
+}
+
+todo_fields = {
+    'id' : fields.Integer,
+    'task': fields.String,
+    'completed': fields.Boolean,
+    'category': fields.String(attribute='tag.name'),
+}
+
 
 def get_incomplete_todos(tag = None):
     if tag is None:
@@ -46,12 +59,11 @@ parser.add_argument('task')
 # Todo
 # shows a single todo item and lets you delete a todo item
 class TodosController(Resource):
+    @marshal_with(todo_fields, envelope='Todo')
     def get(self,todo_id):
         abort_if_todo_doesnt_exist(todo_id)
         the_todo = Todo.query.filter_by(id=int(todo_id)).first()
-        print('===========================')
-        print(the_todo.json_repr())
-        return json.dumps(the_todo.json_repr()),200
+        return the_todo,200
         
         
 
