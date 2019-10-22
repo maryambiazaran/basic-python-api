@@ -108,21 +108,30 @@ class TodosController(Resource):
 # TodoList
 # shows a list of all todos, and lets you POST to add new tasks
 
-# class TodoList(Resource):
-#     @marshal_with(todo_fields, envelope='Todo')
-#     # STILL NEED TO WORK ON THIS
-#     def get(self):
-#         return TODOS
+@api.resource('/todos')
+class TodoListController(Resource):
+    @marshal_with(todo_fields, envelope='Todos')
+    def get(self):
+        return Todo.query.all()
+    
+    @marshal_with(todo_fields, envelope='Todo')    
+    def post(self):
+        args = parser.parse_args()
+        if args['task'] and args['category']:
+            new_task_name = args['task']
+            new_task_tag = find_or_create_new_tag(args['category'])
+            new_todo = Todo(new_task_name,new_task_tag)
+            db.session.add(new_todo)
+            db.session.commit()
+            return new_todo, 201
+        else:
+            abort(404,message="Bad user") 
 
-    # def post(self):
-    #     args = parser.parse_args()
-    #     todo_id = int(max(TODOS.keys()).lstrip('todo'))+1
-    #     todo_id = 'todo%i'%todo_id
-    #     TODOS[todo_id] = {'task': args['task']}
-    #     return TODOS[todo_id],201
+
+
 
 # Actually setup the API
-# api.add_resource(TodoList, '/todos')
+# api.add_resource(TodoListController, '/todos')
 # api.add_resource(TodosController,'/todos/<todo_id>')
 
 
