@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>My To-Do List</h1>
+<hr><!-- ------------------------------------ -->
+<p>Hi! Thanks for stopping by! This page is 
+    supposed to explain how my REST API actually 
+    works.</p>
+
+<p>This is my first time making a REST API.
+Which means I'm still learning.
+</p>
+
+<p>I learned that a REST API is an application that has the following characteristics:
+</p>
+<ul>
+    <li> Has a set of resources (at least one) </li>
+    <li> Receive structured and well-defined requests </li>
+    <li> Provides a structured response </li>
+    <li> Might require authentication in order to provide a response </li>
+</ul>
+<br>
+<h1>My API Resources</h1>
+<hr><!-- ------------------------------------ -->
+
+<h2>(1) .../api/todos</h2>
+<h3>GET</h3>
+<p>If you send a GET request to this path, you can see all To-Do items displayed in JSON format. </p>
+
+<p><strong style="color: red">Output</strong>: Will display ALL To-Do's and their parameters.</p>
+<br>
+
+<h3>POST</h3>
+<p>This will create a new To-Do. For this you need to include two parameters:</p>
+<ul>
+        <li><strong>'task'</strong>: A description for the task </li>
+        <li><strong>'category'</strong>: A category for this task</li>
+    </ul>
+    <p><strong style="color: red">Output</strong>: Will display the NEW To-Do and its parameters.</p>
+
+    <br>
+
+<hr><!-- ------------------------------------ -->
+<h2>(2) .../api/todos/<span style="color: red">[todo-id]</span></h2>
+<h3>GET</h3>
+<p>Provides a JSON output of parameters for the To-Do item. </p>
+<p><strong style="color: red">Output</strong>: Will display the requested To-Do and its parameters.</p>
+
+<br><Br>
+<h3>PUT</h3>
+<p>If you send a PUT request to this resource, you can update the following parameter values for the corresponding todo:</p>
+<ul>
+    <li><strong>'task'</strong>: You can modify the task for this To-Do </li>
+    <li><strong>'completed'</strong>: You can modify the completion flag. True/False</li>
+    <li><strong>'category'</strong>: You can modify the category of this To-Do</li>
+</ul>
+<p><strong style="color: red">Output</strong>: Will display the updated To-Do and its parameters.</p>
+
+<br>
+<h3>DELETE</h3>
+<p>Removes the To-Do. </p>
+<p><strong style="color: red">Output</strong>: There is no output here.</p>
+<br>
+<p>To be continued...</p>
+
+    
+{% endblock %}

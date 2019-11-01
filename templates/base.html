@@ -6,6 +6,12 @@
                 font-family: palatino
             }
 
+            body {
+                margin-bottom: 100px;
+                margin-right: 150px;
+                margin-left: 150px;
+                }
+
             .error{
                 color: red;
                 font-style: italic;
@@ -36,7 +42,7 @@
             }
 
             .finished_box {
-                width:80vw;
+                /* width:80vw; */
                 background-color: rgb(245, 255, 245);
                 border-radius: 10px;
                 padding: 5px 5px;
@@ -44,7 +50,7 @@
             }
 
             .todo_box {
-                width:80vw;
+                /* width:80vw; */
                 background-color: rgb(255, 246, 246);
                 border-radius: 10px;
                 padding: 5px 5px;
@@ -57,7 +63,9 @@
 <body>
 
     <div>
-        <a href='/apidocs'>Documentation</a>
+        <a href='/'>Home</a> | 
+        <a href='/apidocs'>Documentation</a> | 
+        <a href='/api/todos'>JSON View</a>
     </div>
 <!-- 
     {% with messages = get_flashed_messages(with_categories = True) %}

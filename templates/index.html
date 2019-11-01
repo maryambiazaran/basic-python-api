@@ -7,10 +7,11 @@
         <hr>
         
     <div class='todo_box'>
+            <h2 class = 'todo'> Open Items</h2>
         {% if incomplete_todos|length == 0 %}
-            <br><i> Nothing here! Looks like you can rest for now... </i>
+            <i> Nothing here! Looks like you can rest for now... </i>
         {% else %}
-        <h2 class = 'todo'> Open Items</h2>
+        
 
             <ul>
                 {% for todo in incomplete_todos %}
@@ -27,10 +28,11 @@
     </div>
 
     <div class = 'finished_box'>
+            <h2 class = 'finished'> Completed Items</h2>
+
         {% if completed_todos|length == 0 %}
-            <br><i> You haven't finished any tasks yet! </i>
+            <i> You haven't finished any tasks yet! </i>
         {% else %}
-        <h2 class = 'finished'> Completed Items</h2>
         <ul>
             {% for todo in completed_todos %}
             <li> 

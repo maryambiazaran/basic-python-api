@@ -193,7 +193,9 @@ def create_todo():
     r_post = requests.post(url = API_ENDPOINT, data = post_data)
     return redirect('/')
 
-
+@app.route('/apidocs')
+def docs():
+    return render_template('apidoc.html')
 
 
 if __name__ == '__main__':
