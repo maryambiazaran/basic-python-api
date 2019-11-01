@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+        <h1>My To-Do List</h1>
+
+        <hr>
+        
+    <div class='todo_box'>
+        {% if incomplete_todos|length == 0 %}
+            <br><i> Nothing here! Looks like you can rest for now... </i>
+        {% else %}
+        <h2 class = 'todo'> Open Items</h2>
+
+            <ul>
+                {% for todo in incomplete_todos %}
+                <li> 
+                    <form action = '/update' method = 'POST' style = 'display: inline-block'>
+                        <input type = 'submit' value = 'Done!' class = 'done' />
+                        <input type = 'hidden' value = '{{ todo.id }}' name = 'todo-id' />
+                        {{ todo.task }}, <em style="color:grey">{{todo.tag.name}}</em>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class = 'finished_box'>
+        {% if completed_todos|length == 0 %}
+            <br><i> You haven't finished any tasks yet! </i>
+        {% else %}
+        <h2 class = 'finished'> Completed Items</h2>
+        <ul>
+            {% for todo in completed_todos %}
+            <li> 
+                <form action = '/update' method = 'POST' style = 'display: inline-block'>
+                    <input type = 'submit' value = 'Un-Done!' class = 'undone'/>
+                    <input type = 'hidden' value = '{{ todo.id }}' name = 'todo-id' />
+                    {{ todo.task }}, <em style="color:grey">{{todo.tag.name}}</em>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>        
+        {% endif %}
+    </div>
+<hr>
+    <h2>New Task:</h2>
+        <form action = '/new-todo' method = 'POST'>
+            <label>
+                Task: <input type = 'text' name = 'task' />
+            </label>
+            <br>
+            <label>
+                Category: <input type = 'text' name = 'category' />
+            </label>
+<br>
+            <input type = 'submit' value = 'Add Task' />
+        </form>
+        <hr>
+{% endblock %}

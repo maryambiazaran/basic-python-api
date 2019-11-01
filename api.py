@@ -1,9 +1,10 @@
 from app import app,db
 from models import Todo, Tag
-# from flask import request
+from flask import request, render_template,redirect
 from flask_restful import Resource, Api, reqparse, abort, fields, marshal_with
 import json
 from helpers import str2bool
+import requests
 
 #app = Flask(__name__)
 api = Api(app)
@@ -23,6 +24,15 @@ todo_fields = {
 }
 
 # =======================================
+# def validate_auth():
+# 	auth = request.authorization
+# 	if not auth:  # no header set
+# 		abort(401)
+# 	user = UserModel.query.filter_by(username=auth.username).first()
+# 	if user is None or user.password != auth.password:
+# 		abort(401)
+
+# =======================================
 
 def get_incomplete_todos(tag = None):
     if tag is None:
@@ -30,8 +40,8 @@ def get_incomplete_todos(tag = None):
     else:
         return Todo.query.filter_by(tag_id=tag.id, completed=True).order_by(-Todo.id).all()
 
-def get_inactive_posts():
-    return Todo.query.filter_by(completed=False).order_by(-Todo.id).all()
+def get_complete_todos():
+    return Todo.query.filter_by(completed=True).order_by(-Todo.id).all()
 
 # =======================================
 
@@ -67,7 +77,7 @@ parser.add_argument('completed', type=str2bool, default=None, help="Is the task 
 
 # Todo
 # shows a single todo item and lets you delete a todo item
-@api.resource('/todos/<todo_id>')
+@api.resource('/api/todos/<todo_id>')
 class TodosController(Resource):
     
     #GET
@@ -108,7 +118,7 @@ class TodosController(Resource):
 # TodoList
 # shows a list of all todos, and lets you POST to add new tasks
 
-@api.resource('/todos')
+@api.resource('/api/todos')
 class TodoListController(Resource):
     @marshal_with(todo_fields, envelope='Todos')
     def get(self):
@@ -125,7 +135,7 @@ class TodoListController(Resource):
             db.session.commit()
             return new_todo, 201
         else:
-            abort(404,message="Bad user") 
+            abort(404,message="Bad user")
 
 
 
@@ -135,5 +145,57 @@ class TodoListController(Resource):
 # api.add_resource(TodosController,'/todos/<todo_id>')
 
 
+
+@app.route('/')
+def index():
+    
+    # GET REQUEST - INDIVIDUAL
+    the_url = 'http://localhost:5000/api/todos'
+    todo_id = 1
+    if todo_id:
+        rget = requests.get(url = the_url+'/'+str(todo_id))
+    else:
+        rget = requests.get(url = the_url)
+
+    # print('----------------------------\n',rget.json())
+    # return str(rget.json())
+    return render_template('index.html',incomplete_todos = get_incomplete_todos(), completed_todos = get_complete_todos())
+    
+
+    # POST REQUEST - NEW TASKS
+    # API_ENDPOINT2 = 'http://localhost:5000/api/todos'
+    # data_2 = {'task':'do all the things',
+    # 'category': 'good stuff'}
+    # rpost = requests.post(url = API_ENDPOINT2, data = data_2)
+    # pastebin_url = rpost.text 
+    # print('----------------------------\n',pastebin_url)
+    # return render_template('index.html')
+
+    # PUT REQUEST - MODIFY TASK
+
+@app.route('/update', methods = ['POST'])
+def update_todo():
+    todo_id = (request.form['todo-id'])
+    API_ENDPOINT = 'http://localhost:5000/api/todos/'+todo_id
+    current_stat = Todo.query.get(todo_id).completed
+    put_data = {'completed' : not current_stat}
+    r_put = requests.put(url = API_ENDPOINT, data = put_data)
+    return redirect('/')
+
+
+@app.route('/new-todo', methods = ['POST'])
+def create_todo():
+    API_ENDPOINT = 'http://localhost:5000/api/todos'
+    todo_task = request.form['task']
+    todo_tag = request.form['category']
+    post_data = {'task' : todo_task,
+    'category': todo_tag }
+    r_post = requests.post(url = API_ENDPOINT, data = post_data)
+    return redirect('/')
+
+
+
+
 if __name__ == '__main__':
+    
     app.run(debug = True)

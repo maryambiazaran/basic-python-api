@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            * {
+                font-family: palatino
+            }
+
+            .error{
+                color: red;
+                font-style: italic;
+            }
+
+            h1 {
+                color: navy;
+                font-family:Verdana, Geneva, Tahoma, sans-serif;
+                font-weight: bold;
+            }
+
+            .todo{
+                color: darkred ;
+            }
+
+            .finished{
+                color: darkgreen
+            }
+
+            .done {
+                background-color: rgb(186, 252, 186);
+	            color: black;
+            }
+
+            .undone{
+                background-color: rgb(250, 195, 195);
+	            color: black;
+            }
+
+            .finished_box {
+                width:80vw;
+                background-color: rgb(245, 255, 245);
+                border-radius: 10px;
+                padding: 5px 5px;
+                margin: 5px auto;
+            }
+
+            .todo_box {
+                width:80vw;
+                background-color: rgb(255, 246, 246);
+                border-radius: 10px;
+                padding: 5px 5px;
+                margin: 5px auto;
+            }
+        </style>
+        <title>{{title}}</title>
+        
+    </head>
+<body>
+
+    <div>
+        <a href='/apidocs'>Documentation</a>
+    </div>
+<!-- 
+    {% with messages = get_flashed_messages(with_categories = True) %}
+    
+        
+        {% for category,message in messages %}
+        <p class = '{{category}}'>
+            {{ message }}
+        </p>
+        {% endfor %}
+        
+    {% endwith %} 
+-->
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

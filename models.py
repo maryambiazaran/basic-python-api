@@ -1,4 +1,5 @@
 from app import db
+from hashutils import check_pw_hash, make_pw_hash
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key= True)
@@ -35,3 +36,16 @@ class Tag(db.Model):
 
     def __init__(self, name):
         self.name = name
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(20), nullable = False, unique = True)
+    pw_hash = db.Column(db.String(128))
+
+    def __init__(self, username, password):
+            self.username = username
+            self.pw_hash = make_pw_hash(password)
+
+    def check_password(self,password):
+        return check_pw_hash(password,self.pw_hash)
